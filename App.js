@@ -1,4 +1,31 @@
 import { Component } from 'react';
+import './App.css'
+
+class ToDoItem extends Component {
+  //domyślny stan propsa dla done
+  static defaultProps = {
+    done: false
+  }
+
+  state = {
+    done: this.props.done
+  }
+  //zmiana wartosci dla done w momecie wykonania
+  toggleDone = () => {
+    this.setState({done: !this.state.done})
+  }
+
+  render () {
+    const { text } = this.props
+
+    return (
+      //Zmiana wrtosci css w odpowiedzi na zmiane wartosci done
+      <div onClick={this.toggleDone} className={this.state.done ? 'doneTodo' : ''}>
+        <p>{text}</p>
+      </div>
+    )
+  }
+}
 
 class ToDoList extends Component {
   //state odpowiada za stan zmiennej, czyli taka dynamiczna zmienna
@@ -26,7 +53,7 @@ class ToDoList extends Component {
     return (
       <div>
         <h1>{title}</h1>
-        {tasks.map(task => <div><p>{task}</p></div>)}
+        {tasks.map(task => <ToDoItem text={task.text} done={task.done}/>)}
         <input type='text' onChange={this.updateDraft} value={draft}/>
         <button onClick={this.addToDo}>Add</button>
       </div>
@@ -36,8 +63,8 @@ class ToDoList extends Component {
 
 function App() {
   var myTasks = [
-      'Recod a ReactJS video',
-      'Go for a walk'
+      {done: true, text: 'Recod a ReactJS video'},
+      {done: false, text: 'Go for a walk'}
       ]
 
   return (
